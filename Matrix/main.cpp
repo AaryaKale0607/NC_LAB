@@ -1,19 +1,21 @@
-#include "include/matrix.hpp"
-#include <sstream>
-#include <vector>
-#include "include/linear_solver.hpp"
+#include "gaussian_solver.hpp"
+#include <iostream>
+#include <fstream>
+
+using namespace std;
 
 int main()
 {
     try
     {
-        int n = 225; 
-        
-        LinearSolver* solver = new Matrix(n, n + 1);
+        int n = 225;
+
+        // Base class pointer → Runtime Polymorphism
+        SystemOfLinearEquation* solver = new GaussianSolver(n);
 
         solver->readFromFile("input1.txt");
 
-        solver->solve(true);
+        solver->solve();   // no bool parameter anymore
 
         auto solution = solver->getSolution();
 

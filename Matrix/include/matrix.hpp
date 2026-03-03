@@ -4,36 +4,32 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "include/linear_solver.hpp"
 
 using namespace std;
 
-class Matrix : public LinearSolver
+class Matrix
 {
-private:
+protected:
     int rows;
     int cols;
     double **data;
-    vector<double> solution;
 
 public:
     Matrix(int r, int c);
     Matrix(const Matrix &other);
-    ~Matrix();
+    virtual ~Matrix();   // make virtual (important for inheritance)
 
-    void readFromFile(const string &filename) override;
+    // Keep your existing functions
+    void readFromFile(const string &filename);
     void writeToFile(const string &filename) const;
 
     Matrix add(const Matrix &other) const;
     Matrix subtract(const Matrix &other) const;
 
-    void gaussianElimination(bool pivoting);  
-    vector<double> backwardSubstitution() const;
-
-    void solve(bool pivoting) override;
-    vector<double> getSolution() const override;
-
     void display() const;
+
+    int getRows() const;
+    int getCols() const;
 };
 
 #endif

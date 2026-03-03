@@ -93,14 +93,3 @@ Matrix Matrix::subtract(const Matrix &other) const
 }
 
 
-
-void Matrix::solve(bool pivoting)
-{
-    gaussianElimination(pivoting);
-    solution = backwardSubstitution();
-}
-
-std::vector<double> Matrix::getSolution() const
-{
-    return solution;
-}

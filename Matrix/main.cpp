@@ -1,19 +1,21 @@
 #include "include/matrix.hpp"
 #include <sstream>
 #include <vector>
+#include "include/linear_solver.hpp"
 
 int main()
 {
     try
     {
         int n = 225; 
-        Matrix m(n, n + 1);
+        
+        LinearSolver* solver = new Matrix(n, n + 1);
 
-        m.readFromFile("input1.txt");
+        solver->readFromFile("input1.txt");
 
-        m.gaussianElimination(true);
+        solver->solve(true);
 
-        auto solution = m.backwardSubstitution();
+        auto solution = solver->getSolution();
 
         ofstream out("output1.txt");
 
@@ -21,6 +23,8 @@ int main()
             out << val << endl;
 
         out.close();
+
+        delete solver;
 
         cout << "Solution written to output1.txt\n";
     }

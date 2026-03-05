@@ -14,7 +14,7 @@ public:
     };
 
 private:
-    Method method;
+    Method method;//store selected method by user
 
 public:
     LUSolver(int n, Method m);//Constructor initializes base class and stores selected method.

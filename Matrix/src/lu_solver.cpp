@@ -23,14 +23,14 @@ void LUSolver::forwardSubstitution(std::vector<std::vector<double>> &L,
     int n = rows;
     std::vector<double> b(n);
 
-    for (int i = 0; i < n; i++)
-        b[i] = data[i][cols - 1];
+    for (int i = 0; i < n; i++)//Extract right-hand side vector from augmented matrix.
+        b[i] = data[i][cols - 1];//b veactor 
 
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < n; i++)//Iterate through rows of L
     {
         double sum = b[i];
 
-        for (int j = 0; j < i; j++)
+        for (int j = 0; j < i; j++)//Iterate through known values
             sum -= L[i][j] * y[j];//subtracts already known values.
 
         y[i] = sum / L[i][i];
@@ -41,9 +41,9 @@ void LUSolver::backwardSubstitution(std::vector<std::vector<double>> &U,
                                     std::vector<double> &y)//solve this system U x = y
 {
     int n = rows;
-    solution.assign(n, 0);
+    solution.assign(n, 0);//Initialize solution vector with zeros.
 
-    for (int i = n - 1; i >= 0; i--)
+    for (int i = n - 1; i >= 0; i--)//Iterate backwards through rows of U
     {
         double sum = y[i];
 
@@ -59,21 +59,21 @@ void LUSolver::backwardSubstitution(std::vector<std::vector<double>> &U,
 void LUSolver::pivotRows(int k)//this will perform partial pivoting.
 {
     int maxRow = k;
-    double maxVal = fabs(data[k][k]);
+    double maxVal = fabs(data[k][k]);//Start with the current row as the maximum.
 
-    for (int i = k + 1; i < rows; i++)
+    for (int i = k + 1; i < rows; i++)//Iterate through rows below the current row to find the maximum element in the current column.
     {
         if (fabs(data[i][k]) > maxVal)
         {
-            maxVal = fabs(data[i][k]);
-            maxRow = i;
+            maxVal = fabs(data[i][k]);//Update maximum value and row index if a larger element is found.
+            maxRow = i;//Update maximum row index.
         }
     }
 
-    if (maxRow != k)
+    if (maxRow != k)//If the maximum row is different from the current row, swap the rows in the augmented matrix.
     {
-        for (int j = 0; j < cols; j++)
-            std::swap(data[k][j], data[maxRow][j]);
+        for (int j = 0; j < cols; j++)//Swap the entire row with the maximum row.
+            std::swap(data[k][j], data[maxRow][j]);//Swap elements in the current row with the maximum row.
     }
 }
 
@@ -160,7 +160,7 @@ void LUSolver::choleskyDecomposition()
 {
     int n = rows;
 
-    std::vector<std::vector<double>> L(n, std::vector<double>(n, 0));
+    std::vector<std::vector<double>> L(n, std::vector<double>(n, 0));//Create Lower triangular matrix L.
     std::vector<double> y(n);
 
     for (int i = 0; i < n; i++)
@@ -174,19 +174,19 @@ void LUSolver::choleskyDecomposition()
 
             if (i == j)//compute diagonal elements
             {
-                double val = data[i][i] - sum;
+                double val = data[i][i] - sum;//compute value for L[i][i]
 
                 if (val <= 0)
                     throw runtime_error("Matrix not positive definite");
 
-                L[i][j] = sqrt(val);
+                L[i][j] = sqrt(val);//compute L[i][i]
             }
             else
                 L[i][j] = (data[i][j] - sum) / L[j][j];
         }
     }
 
-    std::vector<std::vector<double>> U = L;
+    std::vector<std::vector<double>> U = L;//Create U as the transpose of L since A = L * L^T for Cholesky decomposition.
 
     for (int i = 0; i < n; i++)//Transpose Upper Part
         for (int j = i + 1; j < n; j++)//Iterate upper triangular

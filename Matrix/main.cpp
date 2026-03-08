@@ -44,8 +44,8 @@ int main()
             return 0;
         }
 
+        solver->createAugmentedMatrix("49l.txt", "49r.txt", "input.txt");
         solver->readFromFile("input.txt");
-
         solver->solve();
 
         auto solution = solver->getSolution();
@@ -60,6 +60,7 @@ int main()
 
         delete solver;
 
+        cout << "Augmented matrix written to input.txt\n";
         cout << "Solution written to output.txt\n";
     }
     catch (exception &e)
@@ -73,168 +74,3 @@ int main()
 
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// #include "gaussian_solver.hpp"
-// #include "lu_solver.hpp"
-// #include <iostream>
-// #include <fstream>
-
-// using namespace std;
-
-// int main()
-// {
-//     try
-//     {
-//         int n = 225;
-
-//         // Base class pointer → Runtime Polymorphism
-//         SystemOfLinearEquation* solver = new GaussianSolver(n);
-
-//         solver->readFromFile("input1.txt");
-
-//         solver->solve();   // no bool parameter anymore
-
-//         auto solution = solver->getSolution();
-
-//         ofstream out("output1.txt");
-
-//         for (double val : solution)
-//             out << val << endl;
-
-//         out.close();
-
-//         delete solver;
-
-//         cout << "Solution written to output1.txt\n";
-//     }
-//     catch (exception &e)
-//     {
-//         cout << "Error: " << e.what() << endl;
-
-//         ofstream out("output.txt");
-//         out << "Computation failed.\n";
-//         out.close();
-//     }
-
-//     return 0;
-// }

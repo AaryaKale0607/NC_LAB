@@ -13,6 +13,9 @@ public:
     SystemOfLinearEquation(int n);//Constructor initializes the base class as an augmented matrix (n x n+1)
 
     virtual void solve() = 0;  // PURE VIRTUAL (Abstraction)
+    void createAugmentedMatrix(const string &leftFilename,
+                               const string &rightFilename,
+                               const string &outputFilename) const;
     std::vector<double> getSolution() const;//Returns the computed solution vector.
 };
 

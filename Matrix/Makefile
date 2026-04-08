@@ -1,47 +1,52 @@
 # Compiler
-CXX = g++
+CXX      = g++
 CXXFLAGS = -std=c++17 -Iinclude
 
-# Source files
-SRC = src/matrix.cpp src/gaussian_solver.cpp src/lu_solver.cpp src/system_linear_eq.cpp  src/iterative_solver.cpp src/eigen.cpp src/gerschgorin.cpp
+# Core library sources
+SRC = src/matrix.cpp src/gaussian_solver.cpp src/lu_solver.cpp \
+      src/system_linear_eq.cpp src/iterative_solver.cpp \
+      src/eigen.cpp src/gerschgorin.cpp
 
-# Object files
+# Interpolation sources (compiled into every executable)
+INTERP_SRC = src/interpolation.cpp src/lagrange.cpp
+
+# Object files (library only)
 OBJ = $(SRC:.cpp=.o)
 
-# Static and shared libraries
+# Libraries
 STATIC_LIB = libmatrix.a
 SHARED_LIB = libmatrix.so
 
 # Default target
 all: $(STATIC_LIB) $(SHARED_LIB) matrix_static matrix_dynamic
 
-# Compile object files
+# Compile library object files
 src/%.o: src/%.cpp
 	$(CXX) $(CXXFLAGS) -fPIC -c $< -o $@
 
-# Create static library
+# Static library
 $(STATIC_LIB): $(OBJ)
 	ar rcs $(STATIC_LIB) $(OBJ)
 
-# Create shared library
+# Shared library
 $(SHARED_LIB): $(OBJ)
 	$(CXX) -shared -o $(SHARED_LIB) $(OBJ)
 
-# Build executable with static library
-matrix_static: main.cpp $(STATIC_LIB)
-	$(CXX) $(CXXFLAGS) main.cpp libmatrix.a -o matrix_static
+# matrix_static — includes interpolation sources directly
+matrix_static: main.cpp $(STATIC_LIB) $(INTERP_SRC)
+	$(CXX) $(CXXFLAGS) main.cpp $(INTERP_SRC) libmatrix.a -o matrix_static
 
-# Build executable with dynamic library
-matrix_dynamic: main.cpp $(SHARED_LIB)
-	$(CXX) $(CXXFLAGS) main.cpp -L. -lmatrix -o matrix_dynamic
+# matrix_dynamic — includes interpolation sources directly
+matrix_dynamic: main.cpp $(SHARED_LIB) $(INTERP_SRC)
+	$(CXX) $(CXXFLAGS) main.cpp $(INTERP_SRC) -L. -lmatrix -o matrix_dynamic
 
-# Run program
+# Run
 run_static:
 	./matrix_static
 
 run_dynamic:
 	LD_LIBRARY_PATH=. ./matrix_dynamic
 
-# Clean build files
+# Clean
 clean:
 	rm -f src/*.o $(STATIC_LIB) $(SHARED_LIB) matrix_static matrix_dynamic

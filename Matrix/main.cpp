@@ -7,7 +7,7 @@
 #include "include/lu_solver.hpp"
 #include "include/matrix.hpp"
 #include "include/gerschgorin.hpp"
-#include "include/lagrange.h"
+#include "include/lagrange.hpp"
 #include <iostream>
 #include <fstream>
 

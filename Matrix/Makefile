@@ -5,10 +5,10 @@ CXXFLAGS = -std=c++17 -Iinclude
 # Core library sources
 SRC = src/matrix.cpp src/gaussian_solver.cpp src/lu_solver.cpp \
       src/system_linear_eq.cpp src/iterative_solver.cpp \
-      src/eigen.cpp src/gerschgorin.cpp
+      src/eigen.cpp src/gerschgorin.cpp src/interpolation.cpp src/lagrange.cpp
 
 # Interpolation sources (compiled into every executable)
-INTERP_SRC = src/interpolation.cpp src/lagrange.cpp
+#INTERP_SRC = src/interpolation.cpp src/lagrange.cpp
 
 # Object files (library only)
 OBJ = $(SRC:.cpp=.o)

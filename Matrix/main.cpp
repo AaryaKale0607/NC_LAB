@@ -18,9 +18,7 @@ int main()
     try
     {
         int choice;
-
-        cout << "\n============================================\n";
-        cout << "         Matrix Computation Suite\n";
+        cout << "         Matrix Computation \n";
         cout << "============================================\n";
         cout << "Choose Method:\n";
         cout << "  1. Gaussian Elimination\n";

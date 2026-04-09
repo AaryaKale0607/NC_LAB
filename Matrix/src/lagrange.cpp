@@ -1,4 +1,4 @@
-#include "lagrange.h"
+#include "lagrange.hpp"
 #include <iostream>
 #include <iomanip>
 #include <cmath>

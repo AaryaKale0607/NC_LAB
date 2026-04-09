@@ -35,7 +35,6 @@ int main()
         cout << "Enter choice: ";
         cin >> choice;
 
-        // ── Lagrange Interpolation ──────────────────────────────────────────
         if (choice == 8)
         {
             string filename;
@@ -57,8 +56,6 @@ int main()
             cout << "\nDone.\n";
             return 0;
         }
-
-        // ── All other choices: need the linear system matrix ────────────────
         int n = 225;
         Matrix augmented(n, n + 1);
         augmented.readFromFile("input1.txt");

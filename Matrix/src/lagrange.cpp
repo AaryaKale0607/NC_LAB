@@ -5,9 +5,6 @@
 #include <stdexcept>
 #include <algorithm>
 
-// -------------------------------------------------------
-// Constructors — delegate to Interpolation
-// -------------------------------------------------------
 Lagrange::Lagrange(const std::vector<DataPoint>& points)
     : Interpolation(points)
 {}
@@ -16,10 +13,6 @@ Lagrange::Lagrange(const std::string& filename)
     : Interpolation(filename)
 {}
 
-// -------------------------------------------------------
-// basisValue  —  L_i(x)
-//   L_i(x) = product_{j!=i} (x - x_j) / (x_i - x_j)
-// -------------------------------------------------------
 double Lagrange::basisValue(int i, double x) const
 {
     const auto& data  = dataPoints;         // protected member from Interpolation
@@ -39,9 +32,7 @@ double Lagrange::basisValue(int i, double x) const
     return numerator / denominator;
 }
 
-// -------------------------------------------------------
 // evaluate  —  P(x) = Σ f_i * L_i(x)
-// -------------------------------------------------------
 double Lagrange::evaluate(double x) const
 {
     const auto& data = dataPoints;
@@ -52,16 +43,11 @@ double Lagrange::evaluate(double x) const
     return result;
 }
 
-// -------------------------------------------------------
-// basisCoeffs  —  coefficient vector of L_i(x)
-//   returned[k] = coefficient of x^k
-// -------------------------------------------------------
 std::vector<double> Lagrange::basisCoeffs(int i) const
 {
     const auto& data = dataPoints;
     int n = static_cast<int>(data.size());
 
-    // Helper: multiply polynomial 'a' by (x - root)
     auto polyMulRoot = [](const std::vector<double>& a, double root) {
         int sz = static_cast<int>(a.size());
         std::vector<double> result(sz + 1, 0.0);
@@ -89,16 +75,12 @@ std::vector<double> Lagrange::basisCoeffs(int i) const
     return coeffs;
 }
 
-// -------------------------------------------------------
-// printPolynomial
-// -------------------------------------------------------
 void Lagrange::printPolynomial() const
 {
     const auto& data = dataPoints;
     int n      = static_cast<int>(data.size());
     int degree = n - 1;
 
-    // Accumulate P(x) coefficient vector
     std::vector<double> poly(degree + 1, 0.0);
     for (int i = 0; i < n; ++i) {
         std::vector<double> Li = basisCoeffs(i);
@@ -106,7 +88,6 @@ void Lagrange::printPolynomial() const
             poly[k] += data[i].fx * Li[k];
     }
 
-    // Round near-zero coefficients
     for (auto& c : poly)
         if (std::fabs(c) < 1e-9) c = 0.0;
 
@@ -144,9 +125,6 @@ void Lagrange::printPolynomial() const
     std::cout << "\n============================================\n";
 }
 
-// -------------------------------------------------------
-// queryLoop
-// -------------------------------------------------------
 void Lagrange::queryLoop() const
 {
     const auto& data = dataPoints;

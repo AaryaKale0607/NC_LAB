@@ -4,25 +4,16 @@
 #include <iostream>
 #include <iomanip>
 
-// -------------------------------------------------------
-// loadMatrix: mirrors the dataPoints into the 2-column
-// Matrix inherited from Matrix so that Matrix utilities
-// (display, file I/O, etc.) work out of the box.
-// -------------------------------------------------------
 void Interpolation::loadMatrix()
 {
     int n = static_cast<int>(dataPoints.size());
     // Re-initialise the base Matrix as n x 2
-    // We use operator() to write each cell.
     for (int i = 0; i < n; ++i) {
         (*this)(i, 0) = dataPoints[i].x;
         (*this)(i, 1) = dataPoints[i].fx;
     }
 }
 
-// -------------------------------------------------------
-// Construct from a vector of DataPoints
-// -------------------------------------------------------
 Interpolation::Interpolation(const std::vector<DataPoint>& points)
     : Matrix(static_cast<int>(points.size()), 2),
       dataPoints(points)
@@ -32,10 +23,6 @@ Interpolation::Interpolation(const std::vector<DataPoint>& points)
     loadMatrix();
 }
 
-// -------------------------------------------------------
-// Construct from a file
-// Format: first line = n, then n lines of "x  f(x)"
-// -------------------------------------------------------
 Interpolation::Interpolation(const std::string& filename)
     : Matrix(1, 2) // temporary size; will be resized after reading
 {
@@ -67,9 +54,6 @@ Interpolation::Interpolation(const std::string& filename)
     loadMatrix();
 }
 
-// -------------------------------------------------------
-// Accessors
-// -------------------------------------------------------
 const std::vector<DataPoint>& Interpolation::getDataPoints() const
 {
     return dataPoints;
@@ -80,9 +64,6 @@ int Interpolation::getNumPoints() const
     return static_cast<int>(dataPoints.size());
 }
 
-// -------------------------------------------------------
-// displayData: pretty-print the data-point table
-// -------------------------------------------------------
 void Interpolation::displayData() const
 {
     const int W = 16;

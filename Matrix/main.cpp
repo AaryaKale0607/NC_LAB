@@ -41,7 +41,7 @@ int main()
             cout << "\nEnter data file name (e.g. Lagrange.txt): ";
             cin >> filename;
 
-            Lagrange lag(filename);
+            Lagrange lag(filename);//creates object , raed file . store points
 
             cout << "\n============================================\n";
             cout << "  Lagrange Interpolation\n";
@@ -49,9 +49,9 @@ int main()
             cout << "  File   : " << filename << "\n";
             cout << "  Points : " << lag.getNumPoints() << "\n";
 
-            lag.displayData();
-            lag.printPolynomial();
-            lag.queryLoop();
+            lag.displayData();//print table
+            lag.printPolynomial();//print final polynomial eq
+            lag.queryLoop();//take test value from user
 
             cout << "\nDone.\n";
             return 0;

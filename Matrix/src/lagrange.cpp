@@ -16,7 +16,7 @@ Lagrange::Lagrange(const std::string& filename)
 double Lagrange::basisValue(int i, double x) const
 {
     const auto& data  = dataPoints;         // protected member from Interpolation
-    int    n           = static_cast<int>(data.size());
+    int    n           = static_cast<int>(data.size());//explicitly convert data type from size_t to int
     double numerator   = 1.0;
     double denominator = 1.0;
 
@@ -43,7 +43,7 @@ double Lagrange::evaluate(double x) const
     return result;
 }
 
-std::vector<double> Lagrange::basisCoeffs(int i) const
+std::vector<double> Lagrange::basisCoeffs(int i) const  //used for formatting final interpolating polynomial
 {
     const auto& data = dataPoints;
     int n = static_cast<int>(data.size());
@@ -58,12 +58,12 @@ std::vector<double> Lagrange::basisCoeffs(int i) const
         return result;
     };
 
-    std::vector<double> coeffs = {1.0};
+    std::vector<double> coeffs = {1.0};//start polynomial
     double denom = 1.0;
 
     for (int j = 0; j < n; ++j) {
         if (j == i) continue;
-        coeffs = polyMulRoot(coeffs, data[j].x);
+        coeffs = polyMulRoot(coeffs, data[j].x);//multiply polynomials
         denom *= (data[i].x - data[j].x);
     }
 

@@ -4,10 +4,10 @@
 #include <iostream>
 #include <iomanip>
 
-void Interpolation::loadMatrix()
+void Interpolation::loadMatrix()//converts data points into matrix form
 {
     int n = static_cast<int>(dataPoints.size());
-    // Re-initialise the base Matrix as n x 2
+
     for (int i = 0; i < n; ++i) {
         (*this)(i, 0) = dataPoints[i].x;
         (*this)(i, 1) = dataPoints[i].fx;
@@ -35,7 +35,7 @@ Interpolation::Interpolation(const std::string& filename)
     if (n <= 0)
         throw std::runtime_error("Interpolation: number of data points must be positive.");
 
-    dataPoints.resize(n);
+    dataPoints.resize(n);//allocates memory
     for (int i = 0; i < n; ++i) {
         if (!(file >> dataPoints[i].x >> dataPoints[i].fx))
             throw std::runtime_error("Interpolation: file has insufficient data. Expected "

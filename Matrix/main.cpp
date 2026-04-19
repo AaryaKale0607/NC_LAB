@@ -8,6 +8,7 @@
 #include "include/matrix.hpp"
 #include "include/gerschgorin.hpp"
 #include "include/lagrange.hpp"
+#include "include/least_squares.hpp"
 #include <iostream>
 #include <fstream>
 
@@ -29,6 +30,7 @@ int main()
         cout << "  6. Gauss-Seidel\n";
         cout << "  7. Gerschgorin Circle Theorem (eigenvalue bounds)\n";
         cout << "  8. Lagrange Interpolation\n";
+        cout << "  9. Least Squares Curve Fitting\n";
         cout << "============================================\n";
         cout << "Enter choice: ";
         cin >> choice;
@@ -54,9 +56,51 @@ int main()
             cout << "\nDone.\n";
             return 0;
         }
-        int n = 225;
+        if (choice == 9)
+        {
+            string filename;
+            cout << "\nEnter data file (e.g. curve_data.txt): ";
+            cin >> filename;
+
+            cout << "\nSelect model:\n";
+            cout << "  1. Linear         (y = a*x + b)\n";
+            cout << "  2. Polynomial     (y = a0 + a1*x + ... + an*x^n)\n";
+            cout << "  3. Exponential    (y = a*e^(b*x))\n";
+            cout << "  4. Power          (y = a*x^b)\n";
+            cout << "  5. Logarithmic    (y = a + b*ln(x))\n";
+            cout << "Model choice: ";
+            int mChoice; cin >> mChoice;
+
+            FitModel fm = FitModel::LINEAR;
+            int deg = 1;
+            if      (mChoice == 2) { fm = FitModel::POLYNOMIAL;
+                                     cout << "Polynomial degree: "; cin >> deg; }
+            else if (mChoice == 3)   fm = FitModel::EXPONENTIAL;
+            else if (mChoice == 4)   fm = FitModel::POWER;
+            else if (mChoice == 5)   fm = FitModel::LOGARITHMIC;
+
+            LeastSquares ls(filename, fm, deg);
+
+            cout << "\n============================================\n";
+            cout << "  Least Squares Curve Fitting\n";
+            cout << "============================================\n";
+            cout << "  File   : " << filename << "\n";
+            cout << "  Points : " << ls.getNumPoints() << "\n";
+
+            ls.displayTable();   // uses Matrix::display() under the hood
+            ls.fit();
+            ls.printSummary();   // equation + R² + RMSE + residuals table
+            ls.writeTable("ls_output.txt");
+            cout << "Data table written to ls_output.txt\n";
+            ls.queryLoop();
+
+            cout << "\nDone.\n";
+            return 0;
+        }
+
+        int n = 49;
         Matrix augmented(n, n + 1);
-        augmented.readFromFile("input1.txt");
+        augmented.readFromFile("input.txt");
 
         Matrix A(n, n);
         for (int i = 0; i < n; i++)
@@ -82,7 +126,7 @@ int main()
             else if (choice == 3) solver = new LUSolver(n, LUSolver::DOOLITTLE);
             else if (choice == 4) solver = new LUSolver(n, LUSolver::CHOLESKY);
 
-            solver->readFromFile("input1.txt");
+            solver->readFromFile("input.txt");
             solver->solve();
             solution = solver->getSolution();
             delete solver;
@@ -202,16 +246,16 @@ int main()
             return 0;
         }
 
-        ofstream out("output1.txt");
+        ofstream out("output.txt");
         for (int i = 0; i < (int)solution.size(); i++)
             out << "x" << i + 1 << " = " << solution[i] << endl;
         out.close();
-        cout << "\nSolution written to output1.txt\n";
+        cout << "\nSolution written to output.txt\n";
     }
     catch (exception &e)
     {
         cout << "Error: " << e.what() << endl;
-        ofstream out("output1.txt");
+        ofstream out("output.txt");
         out << "Computation failed.\n";
         out.close();
     }

@@ -30,7 +30,7 @@ int main()
         cout << "  6. Gauss-Seidel\n";
         cout << "  7. Gerschgorin Circle Theorem (eigenvalue bounds)\n";
         cout << "  8. Lagrange Interpolation\n";
-        cout << "  9. Least Squares Curve Fitting\n";
+        cout << "  9. Least Squares Curve Fitting (Linear)\n";
         cout << "============================================\n";
         cout << "Enter choice: ";
         cin >> choice;
@@ -41,7 +41,7 @@ int main()
             cout << "\nEnter data file name (e.g. Lagrange.txt): ";
             cin >> filename;
 
-            Lagrange lag(filename);//creates object , raed file . store points
+            Lagrange lag(filename);
 
             cout << "\n============================================\n";
             cout << "  Lagrange Interpolation\n";
@@ -49,51 +49,35 @@ int main()
             cout << "  File   : " << filename << "\n";
             cout << "  Points : " << lag.getNumPoints() << "\n";
 
-            lag.displayData();//print table
-            lag.printPolynomial();//print final polynomial eq
-            lag.queryLoop();//take test value from user
+            lag.displayData();
+            lag.printPolynomial();
+            lag.queryLoop();
 
             cout << "\nDone.\n";
             return 0;
         }
+
         if (choice == 9)
         {
             string filename;
             cout << "\nEnter data file (e.g. curve_data.txt): ";
             cin >> filename;
 
-            cout << "\nSelect model:\n";
-            cout << "  1. Linear         (y = a*x + b)\n";
-            cout << "  2. Polynomial     (y = a0 + a1*x + ... + an*x^n)\n";
-            cout << "  3. Exponential    (y = a*e^(b*x))\n";
-            cout << "  4. Power          (y = a*x^b)\n";
-            cout << "  5. Logarithmic    (y = a + b*ln(x))\n";
-            cout << "Model choice: ";
-            int mChoice; cin >> mChoice;
-
-            FitModel fm = FitModel::LINEAR;
-            int deg = 1;
-            if      (mChoice == 2) { fm = FitModel::POLYNOMIAL;
-                                     cout << "Polynomial degree: "; cin >> deg; }
-            else if (mChoice == 3)   fm = FitModel::EXPONENTIAL;
-            else if (mChoice == 4)   fm = FitModel::POWER;
-            else if (mChoice == 5)   fm = FitModel::LOGARITHMIC;
-
-            LeastSquares ls(filename, fm, deg);
+            LeastSquares ls(filename);// calls the file constructor of LeastSquares , 
+            // So after this one line, the object is fully loaded with data and ready to fit.
 
             cout << "\n============================================\n";
-            cout << "  Least Squares Curve Fitting\n";
+            cout << "  Least Squares Curve Fitting (Linear)\n";
             cout << "============================================\n";
             cout << "  File   : " << filename << "\n";
-            cout << "  Points : " << ls.getNumPoints() << "\n";
+            cout << "  Points : " << ls.getNumPoints() << "\n";//confirm how many points were read
 
-            ls.displayTable();   // uses Matrix::display() under the hood
-            ls.fit();
-            ls.printSummary();   // equation + R² + RMSE + residuals table
+            ls.displayTable();//prints xi fi table
+            ls.fit();//y = a.x + b
+            ls.printSummary();//print full table with other columns
             ls.writeTable("ls_output.txt");
             cout << "Data table written to ls_output.txt\n";
-            ls.queryLoop();
-
+          
             cout << "\nDone.\n";
             return 0;
         }
